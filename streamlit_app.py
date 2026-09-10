@@ -166,6 +166,19 @@ questions = [
     },
 
     {
+        "category": "Machine Learning",
+        "question": "A bank tests a default-classification model. The model correctly identifies 72 borrowers who actually default and misses 18 borrowers who actually default. What is the model's recall (sensitivity) for the default class?",
+        "options": [
+            "44.44%",
+            "80.00%",
+            "90.11%",
+            "92.00%"
+        ],
+        "answer": "80.00%",
+        "explanation": "Recall (sensitivity) = TP / (TP + FN) = 72 / (72 + 18) = 80%. It measures the percentage of actual defaults correctly identified by the model. Do not confuse recall with precision, which uses TP / (TP + FP)."
+    },
+
+    {
         "category": "Time Series",
         "question": "For a stationary AR(1) process, the absolute value of the AR coefficient should generally be:",
         "options": [
