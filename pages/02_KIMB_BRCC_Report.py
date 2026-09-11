@@ -3,13 +3,19 @@ from __future__ import annotations
 from io import BytesIO
 from pathlib import Path
 from datetime import date
+import sys
 
 import pandas as pd
 import streamlit as st
 from pypdf import PdfReader, PdfWriter
 
 ROOT = Path(__file__).resolve().parents[1]
-TEMPLATE_PATH = ROOT / "KIMB" / "BRCC_Report" / "BRCC_Report_Template.pdf"
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from KIMB.BRCC_Report.template_data import get_template_bytes
+
+TEMPLATE_BYTES = get_template_bytes()
 
 st.set_page_config(page_title="KIMB BRCC Report", page_icon="📊", layout="wide")
 st.title("📊 KIMB BRCC Report Builder")
@@ -18,11 +24,6 @@ st.info(
     "Built around KIMB's BRCC reporting framework and benchmarked to Basel/FATF principles and public DIB/SIB governance practices. "
     "Illustrative thresholds must always be replaced by current CBY requirements and Board-approved limits."
 )
-
-if not TEMPLATE_PATH.exists():
-    st.error("BRCC PDF template was not found in KIMB/BRCC_Report.")
-    st.stop()
-TEMPLATE_BYTES = TEMPLATE_PATH.read_bytes()
 
 COMP_METRICS = [
     ["Regulatory submissions delivered on time", "KPI", "100%", "", "", "", ""],
