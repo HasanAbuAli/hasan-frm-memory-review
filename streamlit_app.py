@@ -192,6 +192,20 @@ questions = [
     },
 
     {
+        "category": "Machine Learning",
+        "question": "Which of the following BEST describes a key difference between classical econometric modeling and machine learning?",
+        "options": [
+            "Classical econometrics mainly focuses on maximizing out-of-sample predictive accuracy, while machine learning mainly focuses on estimating interpretable model parameters.",
+            "Classical econometrics typically places greater emphasis on model specification, assumptions, parameter interpretation, and statistical inference, whereas machine learning generally places greater emphasis on flexible pattern recognition and out-of-sample prediction.",
+            "Classical econometric models can only use continuous variables, while machine-learning models can use both continuous and categorical variables.",
+            "Machine-learning models always require fewer observations than classical econometric models."
+        ],
+        "answer": "Classical econometrics typically places greater emphasis on model specification, assumptions, parameter interpretation, and statistical inference, whereas machine learning generally places greater emphasis on flexible pattern recognition and out-of-sample prediction.",
+        "explanation": "Classical econometrics generally starts with a specified statistical/economic relationship and places strong emphasis on assumptions, parameter estimates, interpretation, and inference. Machine learning generally puts greater emphasis on learning patterns from data and achieving strong out-of-sample predictive performance, often using tools such as training/testing data, cross-validation, and regularization. The distinction is not absolute because the two approaches can overlap.",
+        "memory_trick": "Econometrics → Explain / Infer\n\nMachine Learning → Predict / Generalize"
+    },
+
+    {
         "category": "Time Series",
         "question": "For a stationary AR(1) process, the absolute value of the AR coefficient should generally be:",
         "options": [
@@ -596,6 +610,10 @@ if st.session_state.answered:
         )
 
     st.info("💡 " + question["explanation"])
+
+    if question.get("memory_trick"):
+        st.markdown("**Memory trick:**")
+        st.info(question["memory_trick"])
 
     st.write(
         f"### Current score: {st.session_state.score} / {current + 1}"
