@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 
 st.title("🔥 HASAN'S FRM EXAM MEMORY REVIEW 🔥")
 st.caption("Questions created from key topics remembered after the FRM exam.")
@@ -8,6 +9,39 @@ st.caption("Questions created from key topics remembered after the FRM exam.")
 # -----------------------------
 
 questions = [
+
+    {
+        "category": "Machine Learning vs. Econometrics",
+        "question": """A bank wants to analyze corporate loan defaults. Management has two objectives:
+
+1. Predict which current borrowers are most likely to default.
+2. Determine whether increasing the collateral requirement would cause a reduction in default probability, while quantifying statistical uncertainty.
+
+Which approach is most appropriate?""",
+        "options": [
+            "A. Use conventional econometrics for the first objective and machine learning for the second, because econometric models maximize predictive accuracy while machine-learning models establish causality.",
+            "B. Use only machine learning for both objectives, because cross-validation can establish whether changing the collateral requirement causes lower defaults.",
+            "C. Use a validated machine-learning model primarily for the prediction objective and a properly specified econometric or causal-inference framework for the causal objective.",
+            "D. Use only conventional econometrics for both objectives, because machine-learning models cannot analyze default probabilities when explanatory variables are correlated."
+        ],
+        "answer": "C. Use a validated machine-learning model primarily for the prediction objective and a properly specified econometric or causal-inference framework for the causal objective.",
+        "explanation": "Machine learning is often designed for strong out-of-sample prediction and can capture nonlinearities and complex interactions. A causal policy question requires a credible identification strategy, for which a properly specified econometric or causal-inference framework is generally more appropriate. Strong prediction alone does not establish causation.",
+        "solution_steps": [
+            "Identify Objective 1 as a prediction problem: which borrowers are likely to default?",
+            "Identify Objective 2 as a causal question: what would happen if the bank changed collateral requirements?",
+            "Distinguish predictive association from causal effect.",
+            "Match each objective to its principal strength: validated machine learning for prediction; econometric or causal-inference methods for intervention effects and statistical uncertainty."
+        ],
+        "option_explanations": {
+            "A": "Incorrect — this reverses the usual comparative strengths. Machine learning commonly emphasizes prediction, while econometric and causal methods emphasize inference, interpretation, and causal identification.",
+            "B": "Incorrect — cross-validation evaluates predictive performance; by itself it does not resolve confounding, selection bias, or reverse causality.",
+            "C": "Correct — it matches the predictive objective with validated machine learning and the intervention question with an appropriate causal framework.",
+            "D": "Incorrect — machine-learning models can use correlated predictors, although correlation can affect stability and interpretation in some models."
+        },
+        "exam_tip": "Prediction asks: What is likely to happen? Causal inference asks: What would happen if we intervened?",
+        "countdown_seconds": 60,
+        "disclaimer": "This independently created educational content is for learning purposes only. It is not an official GARP® or FRM® examination question and is not endorsed by or affiliated with GARP."
+    },
 
     {
         "category": "Probability",
@@ -568,6 +602,33 @@ st.caption("Topic: " + question["category"])
 
 st.subheader(question["question"])
 
+if question.get("countdown_seconds"):
+    components.html(
+        f"""
+        <div style="font-family:Arial,sans-serif;text-align:center;padding:10px;
+                    border-radius:12px;background:#0f172a;color:white;">
+            <div style="font-size:14px;letter-spacing:.08em;">ANSWER-REVEAL COUNTDOWN</div>
+            <div id="frm-timer" style="font-size:38px;font-weight:800;color:#38bdf8;">
+                {question["countdown_seconds"]}
+            </div>
+        </div>
+        <script>
+            let remaining = {question["countdown_seconds"]};
+            const timer = document.getElementById("frm-timer");
+            const tick = setInterval(() => {{
+                remaining -= 1;
+                timer.textContent = remaining;
+                if (remaining <= 0) {{
+                    clearInterval(tick);
+                    timer.textContent = "Time!";
+                    timer.style.color = "#fbbf24";
+                }}
+            }}, 1000);
+        </script>
+        """,
+        height=105,
+    )
+
 selected = st.radio(
     "Choose your answer:",
     question["options"],
@@ -610,6 +671,22 @@ if st.session_state.answered:
         )
 
     st.info("💡 " + question["explanation"])
+
+    if question.get("solution_steps"):
+        st.markdown("### Step-by-step solution")
+        for step_number, step in enumerate(question["solution_steps"], 1):
+            st.write(f"**{step_number}.** {step}")
+
+    if question.get("option_explanations"):
+        st.markdown("### Why each choice is right or wrong")
+        for option_letter, option_explanation in question["option_explanations"].items():
+            st.write(f"**{option_letter}.** {option_explanation}")
+
+    if question.get("exam_tip"):
+        st.success("🎯 Exam Tip: " + question["exam_tip"])
+
+    if question.get("disclaimer"):
+        st.caption(question["disclaimer"])
 
     if question.get("memory_trick"):
         st.markdown("**Memory trick:**")
